@@ -5,6 +5,7 @@ const requestLogger = (req, res, next) => {
     const userAgent = req.get('User-Agent') || 'Unknown';
 
     console.log(`[${timestamp}] ${method} ${url} - User-Agent: ${userAgent}`);
+    next();
 };
 
 const addTimestamp = (req, res, next) => {
