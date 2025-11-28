@@ -5,6 +5,7 @@ import { addTimestamp, requestLogger } from './middleware/customMiddleware.js';
 import { globalErrorHandler } from './middleware/errorHandler.js';
 import { urlVersioning } from './middleware/apiVersioning.js';
 import { rateLimiting } from './middleware/rateLimiting.js';
+import router from './routes/item-routes.js';
 
 dotenv.config();
 const app = express();
@@ -19,10 +20,11 @@ app.use(express.json());
 app.use(corsConfig());
 app.use(rateLimiting(100, 15 * 60 * 1000)); // 100 requests per 15 minutes
 
+app.use(urlVersioning('v1'));
+app.use('/api/v1', router); // No versioning middleware for v2, accessible directly
+
+// global error handler
 app.use(globalErrorHandler);
-app.use('/api/v1', urlVersioning('v1'), (req, res) => {
-    res.json({ message: 'Welcome to API version 1' });
-});
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);

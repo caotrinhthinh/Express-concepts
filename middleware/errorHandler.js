@@ -6,6 +6,7 @@ class APIError extends Error {
     }
 }
 
+// Wrapper to handle async errors in route handlers (không cần viết try-catch mỗi lần)
 const asyncHandler = (fn) => (req, res, next) => {
     Promise.resolve(fn(req, res, next)).catch(next);
 };
